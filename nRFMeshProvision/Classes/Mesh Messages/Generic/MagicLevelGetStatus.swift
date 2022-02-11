@@ -55,7 +55,7 @@ public struct MagicLevelGetStatus: GenericMessage {
     ///   - index: The target LUT index of the magic level server model.
     ///   - value: The value in the LUT.
     ///   - correlation: The correlation value.
-    ///   - tId: The target value of the Generic Level state.
+    ///   - tId: The transaction id
     public init(io: UInt8, index: UInt16, value: UInt32, correlation: UInt32, tId: UInt8) {
         self.mIO = io
         self.mIndex = index
