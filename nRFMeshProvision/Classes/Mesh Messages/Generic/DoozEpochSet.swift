@@ -102,11 +102,12 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         var uTz = UInt16(packed & 0x1FF);
         // MeshParserUtils.unsignedToSigned from Android-nRF-Mesh-Library
         if ((uTz & (1 << 9 - 1)) != 0) {
-            self.mTzData = -1 * ((1 << 9 - 1) - (uTz & ((1 << 9 - 1) - 1)));
+            let t1 = (1 << 9) - 1
+            let t2 = uTz & ((1 << 9 - 1) - 1)
+            self.mTzData = -1 * (t1 - t2);
         } else {
-            self.mTzData = uTz
+            self.mTzData = Int16(bitPattern: uTz)
         }
-        self.mTzData = uTz
         print("📣mTzData: \(mTzData) (\(String(uTz, radix: 2)))");
         self.mEpoch = parameters.read(fromOffset: 3);
         print("📣mEpoch: \(mEpoch)");
