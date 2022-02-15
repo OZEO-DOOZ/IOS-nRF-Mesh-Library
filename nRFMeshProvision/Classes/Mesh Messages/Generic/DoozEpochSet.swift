@@ -93,24 +93,24 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         tid = parameters[0]
         let packed = UInt16(bitPattern: parameters.read(fromOffset: 1))
         print("📣packed: \(packed) (\(String(packed, radix: 2)))");
-        self.mUnused = UInt8(truncatingIfNeeded: packed >> 14);
+        mUnused = UInt8(truncatingIfNeeded: packed >> 14);
         print("📣mUnused: \(mUnused) (\(String(mUnused, radix: 2)))");
-        self.mIO = UInt8(truncatingIfNeeded: (packed >> 13) & 0x1);
+        mIO = UInt8(truncatingIfNeeded: (packed >> 13) & 0x1);
         print("📣mIO: \(mIO) (\(String(mIO, radix: 2)))");
-        self.mCommand = UInt8(truncatingIfNeeded: (packed >> 9) & 0xF);
+        mCommand = UInt8(truncatingIfNeeded: (packed >> 9) & 0xF);
         print("📣mCommand: \(mCommand) (\(String(mCommand, radix: 2)))");
         let uTz = UInt16(packed & 0x1FF);
-        self.mTzData = Int16(bitPattern: uTz)
+        mTzData = Int16(bitPattern: uTz)
         print("📣mTzData: \(mTzData) (\(String(uTz, radix: 2)))");
-        self.mEpoch = parameters.read(fromOffset: 3);
+        mEpoch = parameters.read(fromOffset: 3);
         print("📣mEpoch: \(mEpoch)");
-        self.mCorrelation = parameters.read(fromOffset: 7);
+        mCorrelation = parameters.read(fromOffset: 7);
         print("📣mCorrelation: \(mCorrelation)");
         if parameters.count == 5 {
-            self.mExtra = parameters.read(fromOffset: 11)
+            mExtra = parameters.read(fromOffset: 11)
             print("📣mExtra: \(String(describing: mExtra))")
         } else {
-            self.mExtra = nil
+            mExtra = nil
         }
     }
 }
