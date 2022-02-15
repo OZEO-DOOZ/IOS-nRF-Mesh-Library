@@ -44,8 +44,8 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         print("📣mCommand: \(mCommand) (\(String(mCommand, radix: 2)))")
         print("📣mIO: \(mIO) (\(String(mIO, radix: 2)))")
         print("📣mUnused: \(mUnused) (\(String(mUnused, radix: 2)))")
-        let byte1: Int = uTz & 0xFF
-        let byte2: Int = mUnused << 6 | mIO << 5 | mCommand << 1 | ((uTz << 8) & 0x7)
+        let byte1: UInt8 = uTz & 0xFF
+        let byte2: UInt8 = mUnused << 6 | mIO << 5 | mCommand << 1 | ((uTz << 8) & 0x7)
         let packed = UInt16(byte2 | byte1)
         print("📣packed: \(packed) (\(String(packed, radix: 2)))")
         data += packed
@@ -54,8 +54,8 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         data += mEpoch
         data += mCorrelation
         if let extra = mExtra {
+            print("📣mExtra: \(String(describing: extra))")
             data += UInt8(extra)
-            print("📣mExtra: \(extra ?? 0)")
         }
         return data
     }
@@ -111,7 +111,7 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         print("📣mCorrelation: \(mCorrelation)");
         if parameters.count == 5 {
             self.mExtra = parameters.read(fromOffset: 11)
-            print("📣mExtra: \(mExtra ?? 0)");
+            print("📣mExtra: \(String(describing: mExtra))")
         } else {
             self.mExtra = nil
         }
