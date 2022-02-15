@@ -36,7 +36,7 @@ public struct DoozEpochStatus: GenericMessage {
 
     public var parameters: Data? {
         var data = Data() + tId
-        let uTz = UInt16(bitPattern: mTzData & 0x1FF)
+        let uTz = UInt16(mTzData & 0x1FF)
         print("📣mTzData: \(mTzData) (\(String(mTzData, radix: 2)))")
         print("📣mTzData & 0x1FF: \(uTz) (\(String(uTz, radix: 2)))")
         print("📣mCommand: \(mCommand) (\(String(mCommand, radix: 2)))")
@@ -44,7 +44,7 @@ public struct DoozEpochStatus: GenericMessage {
         print("📣mUnused: \(mUnused) (\(String(mUnused, radix: 2)))")
         let byte1 = UInt8(truncatingIfNeeded: uTz & 0xFF)
         let byte2 = UInt8(truncatingIfNeeded: mUnused << 6 | mIO << 5 | mCommand << 1 | ((uTz << 8) & 0x7))
-        let packed = UInt16(bitPattern: byte2 | byte1)
+        let packed = UInt16(byte2 | byte1)
         print("📣packed: \(packed) (\(String(packed, radix: 2)))")
         data += packed
         print("📣mEpoch: \(mEpoch)")
@@ -90,7 +90,7 @@ public struct DoozEpochStatus: GenericMessage {
 
     public init?(parameters: Data) {
         tId = parameters[0]
-        let packed = parameters.read(fromOffset: 1)
+        let packed = UInt16(bitPattern: parameters.read(fromOffset: 1))
         print("📣packed: \(packed) (\(String(packed, radix: 2)))");
         self.mUnused = UInt8(truncatingIfNeeded: packed >> 14);
         print("📣mUnused: \(mUnused) (\(String(mUnused, radix: 2)))");
