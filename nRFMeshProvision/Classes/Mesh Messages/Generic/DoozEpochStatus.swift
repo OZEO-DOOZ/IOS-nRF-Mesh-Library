@@ -100,14 +100,7 @@ public struct DoozEpochStatus: GenericMessage {
         self.mCommand = UInt8(truncatingIfNeeded: (packed >> 9) & 0xF);
         print("📣mCommand: \(mCommand) (\(String(mCommand, radix: 2)))");
         var uTz = UInt16(packed & 0x1FF);
-        // MeshParserUtils.unsignedToSigned from Android-nRF-Mesh-Library
-        if ((uTz & (1 << 9 - 1)) != 0) {
-            let t1 = (1 << 9) - 1
-            let t2 = uTz & ((1 << 9 - 1) - 1)
-            self.mTzData = -1 * (t1 - t2);
-        } else {
-            self.mTzData = Int16(bitPattern: uTz)
-        }
+        self.mTzData = Int16(bitPattern: uTz)
         print("📣mTzData: \(mTzData) (\(String(uTz, radix: 2)))");
         self.mEpoch = parameters.read(fromOffset: 3);
         print("📣mEpoch: \(mEpoch)");
