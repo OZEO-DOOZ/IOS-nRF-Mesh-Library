@@ -45,7 +45,7 @@ public struct DoozEpochStatus: GenericMessage {
         let uTzByte1 = UInt8(truncatingIfNeeded: uTz & 0xFF)
         let uTzByte2 = UInt8(truncatingIfNeeded: (uTz << 8) & 0x7)
         let byte2 = UInt8(truncatingIfNeeded: mUnused << 6 | mIO << 5 | mCommand << 1 | uTzByte2)
-        let packed = UInt16(byte2 | byte1)
+        let packed = UInt16(byte2 | uTzByte1)
         print("📣packed: \(packed) (\(String(packed, radix: 2)))")
         data += packed
         print("📣mEpoch: \(mEpoch)")
@@ -99,7 +99,7 @@ public struct DoozEpochStatus: GenericMessage {
         print("📣mIO: \(mIO) (\(String(mIO, radix: 2)))");
         self.mCommand = UInt8(truncatingIfNeeded: (packed >> 9) & 0xF);
         print("📣mCommand: \(mCommand) (\(String(mCommand, radix: 2)))");
-        let uTz = UInt16(packed & 0x1FF);
+        var uTz = UInt16(packed & 0x1FF);
         // MeshParserUtils.unsignedToSigned from Android-nRF-Mesh-Library
         if ((uTz & (1 << 9 - 1)) != 0) {
             uTz = -1 * ((1 << 9 - 1) - (uTz & ((1 << 9 - 1) - 1)));
