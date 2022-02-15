@@ -61,7 +61,7 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         return data
     }
 
-    public let mTzData: UInt16
+    public let mTzData: Int16
     public let mCommand: UInt8
     public let mIO: UInt8
     public let mUnused: UInt8
@@ -79,9 +79,9 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
     ///   - epoch                The current Epoch
     ///   - correlation          Correlation to link request / response
     ///   - extra                RFU
-    public init(tzData: UInt16, command: UInt8, io: UInt8, unused: UInt8, epoch: UInt32, correlation: UInt32, extra: UInt8?) {
+    public init(tzData: Int16, command: UInt8, io: UInt8, unused: UInt8, epoch: UInt32, correlation: UInt32, extra: UInt8?) {
         self.mTzData = tzData
-        self.mUnused = command
+        self.mCommand = command
         self.mIO = io
         self.mUnused = unused
         self.mEpoch = epoch
@@ -102,7 +102,9 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         var uTz = UInt16(packed & 0x1FF);
         // MeshParserUtils.unsignedToSigned from Android-nRF-Mesh-Library
         if ((uTz & (1 << 9 - 1)) != 0) {
-            uTz = -1 * ((1 << 9 - 1) - (uTz & ((1 << 9 - 1) - 1)));
+            self.mTzData = -1 * ((1 << 9 - 1) - (uTz & ((1 << 9 - 1) - 1)));
+        } else {
+            self.mTzData = uTz
         }
         self.mTzData = uTz
         print("📣mTzData: \(mTzData) (\(String(uTz, radix: 2)))");
