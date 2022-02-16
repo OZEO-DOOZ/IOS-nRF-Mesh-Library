@@ -35,33 +35,21 @@ public struct DoozEpochStatus: GenericMessage {
     public static var opCode: UInt32 = 0x8222
 
     public var parameters: Data? {
-        var data = Data() + tId
-        let uTz = UInt16(mTzData & 0x1FF)
-        print("📣mTzData: \(mTzData) (\(String(mTzData, radix: 2)))")
-        print("📣mTzData & 0x1FF: \(uTz) (\(String(uTz, radix: 2)))")
-        print("📣mCommand: \(mCommand) (\(String(mCommand, radix: 2)))")
-        print("📣mIO: \(mIO) (\(String(mIO, radix: 2)))")
-        print("📣mUnused: \(mUnused) (\(String(mUnused, radix: 2)))")
-        let uTzByte1 = UInt8(truncatingIfNeeded: uTz & 0xFF)
-        let uTzByte2 = UInt8(truncatingIfNeeded: (uTz << 8) & 0x7)
-        let byte2 = UInt8(truncatingIfNeeded: mUnused << 6 | mIO << 5 | mCommand << 1 | uTzByte2)
-        let packed = UInt16((byte2 << 8) | uTzByte1)
-        print("📣packed: \(packed) (\(String(packed, radix: 2)))")
-        data += packed
+        var data = Data() + tid
+        print("mPacked: \(mPacked) (\(String(mPacked, radix: 2)))")
         print("📣mEpoch: \(mEpoch)")
         print("📣mCorrelation: \(mCorrelation)")
+        data += mPacked
         data += mEpoch
         data += mCorrelation
         if let extra = mExtra {
             print("📣mExtra: \(String(describing: extra))")
             data += UInt8(extra)
         }
-        return data    }
+        return data
+    }
 
-    public let mTzData: Int16
-    public let mCommand: UInt8
-    public let mIO: UInt8
-    public let mUnused: UInt8
+    public let mPacked: UInt16
     public let mEpoch: UInt32
     public let mCorrelation: UInt32
     public let mExtra: UInt8?
@@ -70,19 +58,13 @@ public struct DoozEpochStatus: GenericMessage {
     /// Creates the DoozEpochStatus message.
     ///
     /// - parameters:
-    ///   - tzData               The time zone value
-    ///   - command              The command of this message (2: read current epoch time and timezone, 8: update epoch and timezone only if it's greater than the device, 15: override epoch and timezone)
-    ///   - io                   Target IO
-    ///   - unused               RFU
+    ///   - packed               A bitmap containing the time zone, the command (2: read current epoch time and timezone, 8: update epoch and timezone only if it's greater than the device, 15: override epoch and timezone) and the io of this message
     ///   - epoch                The current Epoch
     ///   - correlation          Correlation to link request / response
     ///   - extra                RFU
     ///   - tId                  Transaction id
-    public init(tzData: Int16, command: UInt8, io: UInt8, unused: UInt8, epoch: UInt32, correlation: UInt32, extra: UInt8?, tId: UInt8) {
-        self.mTzData = tzData
-        self.mCommand = command
-        self.mIO = io
-        self.mUnused = unused
+    public init(packed: UInt16, epoch: UInt32, correlation: UInt32, extra: UInt8?, tId: UInt8) {
+        self.mPacked = packed
         self.mEpoch = epoch
         self.mCorrelation = correlation
         self.mExtra = extra
@@ -91,24 +73,15 @@ public struct DoozEpochStatus: GenericMessage {
 
     public init?(parameters: Data) {
         tId = parameters[0]
-        let packed = UInt16(bitPattern: parameters.read(fromOffset: 1))
-        print("📣packed: \(packed) (\(String(packed, radix: 2)))");
-        mUnused = UInt8(truncatingIfNeeded: packed >> 14);
-        print("📣mUnused: \(mUnused) (\(String(mUnused, radix: 2)))");
-        mIO = UInt8(truncatingIfNeeded: (packed >> 13) & 0x1);
-        print("📣mIO: \(mIO) (\(String(mIO, radix: 2)))");
-        mCommand = UInt8(truncatingIfNeeded: (packed >> 9) & 0xF);
-        print("📣mCommand: \(mCommand) (\(String(mCommand, radix: 2)))");
-        let uTz = UInt16(packed & 0x1FF);
-        mTzData = Int16(bitPattern: uTz)
-        print("📣mTzData: \(mTzData) (\(String(uTz, radix: 2)))");
-        mEpoch = parameters.read(fromOffset: 3);
-        print("📣mEpoch: \(mEpoch)");
-        mCorrelation = parameters.read(fromOffset: 7);
-        print("📣mCorrelation: \(mCorrelation)");
+        mPacked = parameters.read(fromOffset: 1)
+        print("mPacked: \(mPacked) (\(String(mPacked, radix: 2)))")
+        mEpoch = parameters.read(fromOffset: 3)
+        print("📣mEpoch: \(mEpoch)")
+        mCorrelation = parameters.read(fromOffset: 7)
+        print("📣mCorrelation: \(mCorrelation)")
         if parameters.count == 5 {
             mExtra = parameters.read(fromOffset: 11)
-            print("📣mExtra: \(String(describing: mExtra))");
+            print("📣mExtra: \(String(describing: mExtra))")
         } else {
             mExtra = nil
         }
