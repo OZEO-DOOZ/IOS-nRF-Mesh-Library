@@ -32,6 +32,7 @@
 import Foundation
 
 public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
+    /// The transaction id
     public var tid: UInt8!
     public static let opCode: UInt32 = 0x8220
     public static let responseType: StaticMeshMessage.Type = DoozEpochStatus.self
@@ -71,7 +72,7 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
     }
 
     public init?(parameters: Data) {
-        tId = parameters[0]
+        tid = parameters[0]
         mPacked = parameters.read(fromOffset: 1)
         print("mPacked: \(mPacked) (\(String(mPacked, radix: 2)))")
         mEpoch = parameters.read(fromOffset: 3)

@@ -32,6 +32,7 @@
 import Foundation
 
 public struct MagicLevelGet: AcknowledgedGenericMessage, TransactionMessage {
+    /// The transaction id
     public var tid: UInt8!
     public static let opCode: UInt32 = 0x8224
     public static let responseType: StaticMeshMessage.Type = MagicLevelGetStatus.self
@@ -52,7 +53,6 @@ public struct MagicLevelGet: AcknowledgedGenericMessage, TransactionMessage {
     ///   - io: The target io of the magic level server model.
     ///   - index: The target LUT index of the magic level server model.
     ///   - correlation: The correlation value.
-    ///   - tId: The transaction id
     public init(io: UInt8, index: UInt16, correlation: UInt32) {
         self.mIO = io
         self.mIndex = index

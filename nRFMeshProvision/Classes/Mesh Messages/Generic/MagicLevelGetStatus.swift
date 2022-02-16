@@ -35,7 +35,7 @@ public struct MagicLevelGetStatus: GenericMessage {
     public static var opCode: UInt32 = 0x8226
     
     public var parameters: Data? {
-        return Data() + mIO + mIndex + mValue + mCorrelation + tId
+        return Data() + mIO + mIndex + mValue + mCorrelation + tid
     }
     
     public let mIO: UInt8
@@ -46,7 +46,7 @@ public struct MagicLevelGetStatus: GenericMessage {
     
     public let mCorrelation: UInt32
     
-    public let tId: UInt8
+    public let tid: UInt8
     
     /// Creates the Magic Level Get Status message.
     ///
@@ -55,13 +55,13 @@ public struct MagicLevelGetStatus: GenericMessage {
     ///   - index: The target LUT index of the magic level server model.
     ///   - value: The value in the LUT.
     ///   - correlation: The correlation value.
-    ///   - tId: The transaction id
-    public init(io: UInt8, index: UInt16, value: UInt32, correlation: UInt32, tId: UInt8) {
+    ///   - tid: The transaction id
+    public init(io: UInt8, index: UInt16, value: UInt32, correlation: UInt32, tid: UInt8) {
         self.mIO = io
         self.mIndex = index
         self.mValue = value
         self.mCorrelation = correlation
-        self.tId = tId
+        self.tid = tid
     }
     
     public init?(parameters: Data) {
@@ -69,6 +69,6 @@ public struct MagicLevelGetStatus: GenericMessage {
         mIndex = parameters.read(fromOffset: 1)
         mValue = parameters.read(fromOffset: 3)
         mCorrelation = parameters.read(fromOffset: 7)
-        tId = parameters[11]
+        tid = parameters[11]
     }
 }
