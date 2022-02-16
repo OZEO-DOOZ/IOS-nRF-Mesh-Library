@@ -74,7 +74,7 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
     public init?(parameters: Data) {
         tid = parameters[0]
         mPacked = parameters.read(fromOffset: 1)
-        print("mPacked: \(mPacked) (\(String(mPacked, radix: 2)))")
+        print("📣mPacked: \(mPacked) (\(String(mPacked, radix: 2)))")
         mEpoch = parameters.read(fromOffset: 3)
         print("📣mEpoch: \(mEpoch)")
         mCorrelation = parameters.read(fromOffset: 7)

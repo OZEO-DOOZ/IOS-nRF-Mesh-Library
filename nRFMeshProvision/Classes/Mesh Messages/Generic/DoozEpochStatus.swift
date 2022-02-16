@@ -36,7 +36,7 @@ public struct DoozEpochStatus: GenericMessage {
 
     public var parameters: Data? {
         var data = Data() + tid
-        print("mPacked: \(mPacked) (\(String(mPacked, radix: 2)))")
+        print("📣mPacked: \(mPacked) (\(String(mPacked, radix: 2)))")
         print("📣mEpoch: \(mEpoch)")
         print("📣mCorrelation: \(mCorrelation)")
         data += mPacked
