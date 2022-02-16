@@ -47,7 +47,7 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         let uTzByte1 = UInt8(truncatingIfNeeded: uTz & 0xFF)
         let uTzByte2 = UInt8(truncatingIfNeeded: (uTz << 8) & 0x7)
         let byte2 = UInt8(truncatingIfNeeded: mUnused << 6 | mIO << 5 | mCommand << 1 | uTzByte2)
-        let packed = UInt16(byte2 | uTzByte1)
+        let packed = UInt16((byte2 << 8) | uTzByte1)
         print("📣packed: \(packed) (\(String(packed, radix: 2)))")
         data += packed
         print("📣mEpoch: \(mEpoch)")
