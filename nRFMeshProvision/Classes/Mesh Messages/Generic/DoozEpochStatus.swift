@@ -58,7 +58,7 @@ public struct DoozEpochStatus: GenericMessage {
     /// Creates the DoozEpochStatus message.
     ///
     /// - parameters:
-    ///   - packed               A bitmap containing the time zone, the command (2: read current epoch time and timezone, 8: update epoch and timezone only if it's greater than the device, 15: override epoch and timezone) and the io of this message
+    ///   - packed               A bitmap containing the time zone, the command and the io of this message
     ///   - epoch                The current Epoch
     ///   - correlation          Correlation to link request / response
     ///   - extra                RFU
