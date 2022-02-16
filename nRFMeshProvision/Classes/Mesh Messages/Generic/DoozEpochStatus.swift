@@ -44,7 +44,7 @@ public struct DoozEpochStatus: GenericMessage {
         data += mCorrelation
         if let extra = mExtra {
             print("📣mExtra: \(String(describing: extra))")
-            data += UInt8(extra)
+            data += UInt16(extra)
         }
         return data
     }
@@ -52,7 +52,7 @@ public struct DoozEpochStatus: GenericMessage {
     public let mPacked: UInt16
     public let mEpoch: UInt32
     public let mCorrelation: UInt32
-    public let mExtra: UInt8?
+    public let mExtra: UInt16?
     public let tid: UInt8
 
     /// Creates the DoozEpochStatus message.
@@ -63,7 +63,7 @@ public struct DoozEpochStatus: GenericMessage {
     ///   - correlation          Correlation to link request / response
     ///   - extra                RFU
     ///   - tid                  Transaction id
-    public init(packed: UInt16, epoch: UInt32, correlation: UInt32, extra: UInt8?, tid: UInt8) {
+    public init(packed: UInt16, epoch: UInt32, correlation: UInt32, extra: UInt16?, tid: UInt8) {
         self.mPacked = packed
         self.mEpoch = epoch
         self.mCorrelation = correlation

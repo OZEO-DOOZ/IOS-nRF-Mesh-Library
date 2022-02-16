@@ -47,7 +47,7 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
         data += mCorrelation
         if let extra = mExtra {
             print("📣mExtra: \(String(describing: extra))")
-            data += UInt8(extra)
+            data += UInt16(extra)
         }
         return data
     }
@@ -55,7 +55,7 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
     public let mPacked: UInt16
     public let mEpoch: UInt32
     public let mCorrelation: UInt32
-    public let mExtra: UInt8?
+    public let mExtra: UInt16?
 
     /// Creates the DoozEpochSet message.
     ///
@@ -64,7 +64,7 @@ public struct DoozEpochSet: AcknowledgedGenericMessage, TransactionMessage {
     ///   - epoch                The current Epoch
     ///   - correlation          Correlation to link request / response
     ///   - extra                RFU
-    public init(packed: UInt16, epoch: UInt32, correlation: UInt32, extra: UInt8?) {
+    public init(packed: UInt16, epoch: UInt32, correlation: UInt32, extra: UInt16?) {
         self.mPacked = packed
         self.mEpoch = epoch
         self.mCorrelation = correlation
